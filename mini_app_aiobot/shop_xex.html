@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Магазин одежды</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { font-family: Arial; padding: 10px; }
+        .item { border: 1px solid #ccc; padding: 10px; margin: 5px; }
+        button { padding: 5px 10px; }
+    </style>
+</head>
+<body>
+
+<h2>Каталог</h2>
+
+<div id="catalog"></div>
+    <button onclick="setCategory('tshirts')">Футболки</button>
+    <button onclick="setCategory('hoodies')">Худи</button>
+    <button onclick="setCategory('jackets')">Куртки</button>
+    <h3>🛒 Корзина</h3>
+<div id="cart"></div>
+
+<button onclick="checkout()">Оформить заказ</button>
+
+<script>
+const tg = window.Telegram.WebApp;
+tg.expand();
+
+const products = [
+    {id: 1, name: "Футболка", price: 20, category: "tshirts"},
+    {id: 2, name: "Худи", price: 50, category: "hoodies"},
+    {id: 3, name: "Куртка", price: 100, category: "jackets"}
+];
+
+let cart = [];
+let currentCategory = "tshirts";
+
+function setCategory(cat) {
+    currentCategory = cat;
+    renderCatalog();
+}
+
+function renderCatalog() {
+    const catalog = document.getElementById("catalog");
+    catalog.innerHTML = "";
+
+    const filtered = products.filter(p => p.category === currentCategory);
+
+    filtered.forEach(p => {
+        const div = document.createElement("div");
+        div.className = "item";
+        div.innerHTML = `
+            <b>${p.name}</b><br>
+            ${p.price}$<br>
+            <button onclick="addToCart(${p.id})">Добавить</button>
+        `;
+        catalog.appendChild(div);
+    });
+}
+
+function addToCart(id) {
+    const product = products.find(p => p.id === id);
+    cart.push(product);
+    renderCart();
+}
+
+function renderCart() {
+    const cartDiv = document.getElementById("cart");
+    cartDiv.innerHTML = "";
+
+    cart.forEach(p => {
+        const div = document.createElement("div");
+        div.innerText = `${p.name} - ${p.price}$`;
+        cartDiv.appendChild(div);
+    });
+}
+
+function checkout() {
+    if (cart.length === 0) {
+        alert("Корзина пуста");
+        return;
+    }
+
+    let total = 0;
+
+    const orderText = cart.map(p => {
+        total += p.price;
+        return `${p.name} - ${p.price}$`;
+    }).join("\n");
+
+    const user = tg.initDataUnsafe.user;
+
+    const finalText = `
+🛍 Новый заказ
+
+👤 Клиент: ${user?.username || "без username"}
+
+${orderText}
+
+💰 Итого: ${total}$
+`;
+
+    tg.sendData(finalText);
+
+    // очистка корзины
+    cart = [];
+    renderCart();
+}
+renderCatalog();
+</script>
+</body>
+</html>
