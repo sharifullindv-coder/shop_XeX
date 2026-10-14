@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ru">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#07101d" />
+        <meta
+        name="description"
+        content="KIKshop - магазин одежды на заказ в стиле ModsKIK."
+        />
+        <title>XeX Shop - одежда на заказ</title>
+        <link rel="stylesheet" href="kikshop.css" />
+        <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    </head>
+    <body>
+        <main class="app">
+            <header class="topbar">
+                <div class="brand">
+                    <span class="brand-mark" aria-hidden="true">X</span>
+                    <div>
+                        <h1>XeX Shop</h1>
+                        <span>Мерч и одежда на заказ от экосистемы ModsKIK</span>
+                    </div>
+                </div>
+                <button class="cart-open" id="openCartBtn" type="button">
+                    <span class="cart-label">Корзина</span><span id="cartBadge">0</span>
+                </button>
+            </header>
+
+            <section class="shop-hero" aria-label="О магазине">
+                <div>
+                    <p class="eyebrow">Кастомная одежда</p>
+                    <h2>Соберите заказ, а менеджер уточнит макет, сроки и оплату.</h2>
+                    <p class="lead">
+                        Выберите основу, размер, цвет и пожелания к дизайну. Карточки уже
+                        поддерживают реальные изображения товаров через поле image в
+                        каталоге.
+                    </p>
+                </div>
+                <div class="hero-status" aria-label="Преимущества">
+                    <span>Печать и вышивка</span>
+                    <span>Размеры XS-3XL</span>
+                    <span>Согласование перед оплатой</span>
+                </div>
+            </section>
+
+            <section class="screen active" id="catalogScreen">
+                <div class="controls">
+                    <div class="field">
+                        <label for="searchInput">Поиск</label>
+                        <input
+                        id="searchInput"
+                        type="search"
+                        autocomplete="off"
+                        placeholder="Футболка, худи, кепка..."
+                        />
+                    </div>
+                    <div class="field">
+                        <label for="categorySelect">Категория</label>
+                        <select id="categorySelect"></select>
+                    </div>
+                    <div class="field">
+                        <label for="sortSelect">Сортировка</label>
+                        <select id="sortSelect">
+                            <option value="popular">Сначала популярные</option>
+                            <option value="price-asc">Цена по возрастанию</option>
+                            <option value="price-desc">Цена по убыванию</option>
+                            <option value="name">По названию</option>
+                        </select>
+                    </div>
+                    <div class="catalog-meta" id="catalogMeta"></div>
+                </div>
+                <div class="catalog" id="catalog"></div>
+            </section>
+
+            <section class="screen" id="productScreen"></section>
+
+            <section class="screen" id="cartScreen">
+                <div class="cart-layout">
+                    <div class="cart-panel">
+                        <div class="panel-head">
+                            <h2>Корзина</h2>
+                            <button class="btn ghost" id="clearCartBtn" type="button">Очистить</button>
+                        </div>
+                        <div class="cart-list" id="cartList"></div>
+                    </div>
+                    <form class="checkout-panel" id="orderForm">
+                        <h2>Оформление заказа</h2>
+                        <div class="summary" id="summary"></div>
+                        <div class="form-grid">
+                            <div class="field">
+                                <label for="customerName">Имя</label>
+                                <input
+                                id="customerName"
+                                name="customerName"
+                                type="text"
+                                autocomplete="name"
+                                placeholder="Как к вам обращаться"
+                                required
+                                />
+                            </div>
+                            <div class="field">
+                                <label for="customerPhone">Телефон или Telegram</label>
+                                <input
+                                id="customerPhone"
+                                name="customerPhone"
+                                type="text"
+                                autocomplete="tel"
+                                placeholder="+7... или @username"
+                                required
+                                />
+                            </div>
+                            <div class="field">
+                                <label for="customerCity">Город доставки</label>
+                                <input
+                                id="customerCity"
+                                name="customerCity"
+                                type="text"
+                                autocomplete="address-level2"
+                                placeholder="Например: Москва"
+                                required
+                                />
+                            </div>
+                            <div class="field">
+                                <label for="customerComment">Комментарий к заказу</label>
+                                <textarea
+                                id="customerComment"
+                                name="customerComment"
+                                placeholder="Сроки, доставка, дополнительные пожелания"
+                                ></textarea>
+                            </div>
+                            <div class="form-status" id="formStatus" aria-live="polite"></div>
+                            <button class="btn submit" type="submit">Отправить заказ менеджеру</button>
+                            <button class="btn secondary" id="backToCatalogBtn" type="button">
+                                Вернуться в каталог
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </main>
+
+        <script src="kikshop.js" defer></script>
+    </body>
+</html>
